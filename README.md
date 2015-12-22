@@ -32,8 +32,27 @@ coffees, a working VM containing five configured LXC boxes configured for runnin
   accordingly by adding `:ssh` keys to the `core/run!`function's parameters. Normally, logging in as `root` with key
   `~/.ssh/id_rsa` should work fine.
 
+For example: 
+
+````
+(defn basic-test
+  "A simple test of YourTestDB's safety."
+  [version]
+  (merge tests/noop-test 
+     {:ssh 
+      { :username "root"
+        :private-key-path "~/.ssh/id_rsa"
+      }
+     }
+    )
+ )
+````
+
+
 * **Troubleshooting**:  If during provisioning, your terminal turn to gibberish, follow these steps to manually complete
   provisioning:
+
+ 
 
   First, fix your terminal:
 
@@ -56,6 +75,10 @@ coffees, a working VM containing five configured LXC boxes configured for runnin
 * As mentioned in Jepsen's own README, if you get errors about HostKey failure from jsch, you probably need to auth all of the vms:
 
         for i in 1 2 3 4 5; do ssh-keyscan -t rsa n${i}; done >> ~/.ssh/known_hosts
+
+* If you get permission errors, make sure that vagrant user's home folder is owned by vagrant:  
+
+        sudo chown -R vagrant /home/vagrant 
 
 # TODO
 
